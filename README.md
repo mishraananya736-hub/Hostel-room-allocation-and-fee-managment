@@ -374,3 +374,5 @@ The project includes 6 end-to-end integration workflows verified in `tests/test_
 2. **Online Payment Gateway API**: Direct integration with UPI/Razorpay APIs for automated payment receipts.
 3. **Student Grievance & Maintenance Ticketing**: A complaint management module for plumbing, electrical, and internet repairs.
 4. **Graphical Charts Export**: Generating Matplotlib PNG dashboards for administrative presentations.
+#   H o s t e l - r o o m - a l l o c a t i o n - a n d - f e e - m a n a g m e n t  
+ 
