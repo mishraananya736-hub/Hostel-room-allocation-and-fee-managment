@@ -1,0 +1,22 @@
+============================================================
+      HOSTEL MANAGEMENT SYSTEM - EXECUTIVE SUMMARY
+      Generated On: 2026-11-20 22:57:04
+============================================================
+
+Total Registered Students          : 100
+Total Rooms                        : 46
+Total Room Capacity                : 112
+Total Occupied Beds                : 100
+Total Vacant Beds                  : 12
+Room Occupancy Percentage          : 89.29%
+Total Hostel Fees                  : ₹3,287,000.00
+Total Hostel Fees Collected        : ₹2,019,700.00
+Total Hostel Outstanding Balance   : ₹1,267,300.00
+Total Mess Fees                    : ₹2,500,000.00
+Total Mess Fees Collected          : ₹1,460,000.00
+Total Mess Outstanding Balance     : ₹1,040,000.00
+Students with Pending Hostel Fees  : 60
+Students with Pending Mess Fees    : 60
+Fully Paid Students                : 40
+
+============================================================

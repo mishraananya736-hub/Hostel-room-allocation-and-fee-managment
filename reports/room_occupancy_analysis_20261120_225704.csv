@@ -1,0 +1,5 @@
+Room_Type,Total_Rooms,Total_Capacity,Total_Occupied,Total_Vacancy,Occupancy_Rate_%
+Double,16,32,28,4,87.5
+Four-Bed,6,24,21,3,87.5
+Single,8,8,7,1,87.5
+Triple,16,48,44,4,91.67
