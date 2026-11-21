@@ -14,6 +14,7 @@ High resolution (300 DPI), clean typography, proper margins, and dynamic data in
 from __future__ import annotations
 import os
 import sys
+import time
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Any
 
@@ -85,6 +86,22 @@ def apply_chart_styling(fig: plt.Figure, ax: plt.Axes, title: str, subtitle: Opt
     ax.tick_params(colors=PALETTE["dark_text"], labelsize=9.5)
 
 
+def safe_savefig(fig: plt.Figure, output_path: Path | str, **kwargs) -> None:
+    """Save matplotlib figure safely handling transient Windows / OneDrive file locks."""
+    target_path = Path(output_path).resolve()
+    target_path.parent.mkdir(parents=True, exist_ok=True)
+    last_err = None
+    for attempt in range(6):
+        try:
+            fig.savefig(str(target_path), **kwargs)
+            return
+        except OSError as err:
+            last_err = err
+            time.sleep(0.15 * (attempt + 1))
+    if last_err:
+        raise last_err
+
+
 def open_graph_image(file_path: str | Path) -> bool:
     """
     Safely open a generated image using the operating system's default viewer.
@@ -136,7 +153,7 @@ def plot_room_occupancy(data_mgr: Optional[DataManager] = None, output_path: Opt
         ax.text(0.5, 0.5, "No Room Data Available", ha="center", va="center", fontsize=14, color=PALETTE["muted_text"])
         apply_chart_styling(fig, ax, "HOSTEL ROOM OCCUPANCY ANALYSIS", "No rooms recorded in database")
         fig.tight_layout()
-        fig.savefig(output_path, dpi=DPI, facecolor=fig.get_facecolor(), bbox_inches="tight")
+        safe_savefig(fig, output_path, dpi=DPI, facecolor=fig.get_facecolor(), bbox_inches="tight")
         plt.close(fig)
         return str(output_path)
 
@@ -179,7 +196,7 @@ def plot_room_occupancy(data_mgr: Optional[DataManager] = None, output_path: Opt
 
     ax.legend(loc="upper right", frameon=True, facecolor=PALETTE["card_bg"], edgecolor=PALETTE["grid_line"], fontsize=9)
     fig.tight_layout()
-    fig.savefig(output_path, dpi=DPI, facecolor=fig.get_facecolor(), bbox_inches="tight")
+    safe_savefig(fig, output_path, dpi=DPI, facecolor=fig.get_facecolor(), bbox_inches="tight")
     plt.close(fig)
     return str(output_path)
 
@@ -210,7 +227,7 @@ def plot_fee_collection(data_mgr: Optional[DataManager] = None, output_path: Opt
     if fees_df.empty:
         ax.text(0.5, 0.5, "No Fee Data Available", ha="center", va="center", fontsize=14, color=PALETTE["muted_text"])
         ax.set_title("FEE COLLECTION AND OUTSTANDING DUES", fontsize=14, fontweight="bold", color=PALETTE["navy"])
-        fig.savefig(output_path, dpi=DPI, facecolor=fig.get_facecolor(), bbox_inches="tight")
+        safe_savefig(fig, output_path, dpi=DPI, facecolor=fig.get_facecolor(), bbox_inches="tight")
         plt.close(fig)
         return str(output_path)
 
@@ -275,7 +292,7 @@ def plot_fee_collection(data_mgr: Optional[DataManager] = None, output_path: Opt
         fontsize=14, fontweight="bold", color=PALETTE["navy"], pad=20
     )
     fig.tight_layout()
-    fig.savefig(output_path, dpi=DPI, facecolor=fig.get_facecolor(), bbox_inches="tight")
+    safe_savefig(fig, output_path, dpi=DPI, facecolor=fig.get_facecolor(), bbox_inches="tight")
     plt.close(fig)
     return str(output_path)
 
@@ -305,7 +322,7 @@ def plot_hostel_mess_comparison(data_mgr: Optional[DataManager] = None, output_p
     if fees_df.empty:
         ax.text(0.5, 0.5, "No Financial Data Available", ha="center", va="center", fontsize=14, color=PALETTE["muted_text"])
         apply_chart_styling(fig, ax, "HOSTEL AND MESS FINANCIAL PERFORMANCE")
-        fig.savefig(output_path, dpi=DPI, facecolor=fig.get_facecolor(), bbox_inches="tight")
+        safe_savefig(fig, output_path, dpi=DPI, facecolor=fig.get_facecolor(), bbox_inches="tight")
         plt.close(fig)
         return str(output_path)
 
@@ -358,7 +375,7 @@ def plot_hostel_mess_comparison(data_mgr: Optional[DataManager] = None, output_p
 
     ax.legend(loc="upper right", frameon=True, facecolor=PALETTE["card_bg"], edgecolor=PALETTE["grid_line"], fontsize=9.5)
     fig.tight_layout()
-    fig.savefig(output_path, dpi=DPI, facecolor=fig.get_facecolor(), bbox_inches="tight")
+    safe_savefig(fig, output_path, dpi=DPI, facecolor=fig.get_facecolor(), bbox_inches="tight")
     plt.close(fig)
     return str(output_path)
 
@@ -388,7 +405,7 @@ def plot_course_distribution(data_mgr: Optional[DataManager] = None, output_path
     if students_df.empty:
         ax.text(0.5, 0.5, "No Student Records Available", ha="center", va="center", fontsize=14, color=PALETTE["muted_text"])
         apply_chart_styling(fig, ax, "COURSE-WISE STUDENT DISTRIBUTION")
-        fig.savefig(output_path, dpi=DPI, facecolor=fig.get_facecolor(), bbox_inches="tight")
+        safe_savefig(fig, output_path, dpi=DPI, facecolor=fig.get_facecolor(), bbox_inches="tight")
         plt.close(fig)
         return str(output_path)
 
@@ -428,7 +445,7 @@ def plot_course_distribution(data_mgr: Optional[DataManager] = None, output_path
     ax.xaxis.set_major_locator(ticker.MaxNLocator(integer=True))
 
     fig.tight_layout()
-    fig.savefig(output_path, dpi=DPI, facecolor=fig.get_facecolor(), bbox_inches="tight")
+    safe_savefig(fig, output_path, dpi=DPI, facecolor=fig.get_facecolor(), bbox_inches="tight")
     plt.close(fig)
     return str(output_path)
 
@@ -458,7 +475,7 @@ def plot_payment_distribution(data_mgr: Optional[DataManager] = None, output_pat
     if fees_df.empty:
         ax.text(0.5, 0.5, "No Payment Records Available", ha="center", va="center", fontsize=14, color=PALETTE["muted_text"])
         apply_chart_styling(fig, ax, "STUDENT FEE PAYMENT DISTRIBUTION")
-        fig.savefig(output_path, dpi=DPI, facecolor=fig.get_facecolor(), bbox_inches="tight")
+        safe_savefig(fig, output_path, dpi=DPI, facecolor=fig.get_facecolor(), bbox_inches="tight")
         plt.close(fig)
         return str(output_path)
 
@@ -487,7 +504,7 @@ def plot_payment_distribution(data_mgr: Optional[DataManager] = None, output_pat
 
     ax.legend(loc="upper right", frameon=True, facecolor=PALETTE["card_bg"], edgecolor=PALETTE["grid_line"], fontsize=9)
     fig.tight_layout()
-    fig.savefig(output_path, dpi=DPI, facecolor=fig.get_facecolor(), bbox_inches="tight")
+    safe_savefig(fig, output_path, dpi=DPI, facecolor=fig.get_facecolor(), bbox_inches="tight")
     plt.close(fig)
     return str(output_path)
 

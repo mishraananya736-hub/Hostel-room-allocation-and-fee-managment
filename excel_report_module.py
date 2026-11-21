@@ -79,6 +79,32 @@ def auto_fit_columns(ws, min_width: int = 12, max_width: int = 40) -> None:
         ws.column_dimensions[col_letter].width = min(max(max_len + 4, min_width), max_width)
 
 
+def configure_sheet_page_setup(ws, landscape: bool = True, zoom: int = 100) -> None:
+    """Configure professional print options, headers/footers, print area, and zoom."""
+    ws.views.sheetView[0].showGridLines = True
+    ws.views.sheetView[0].zoomScale = zoom
+
+    if landscape:
+        ws.page_setup.orientation = ws.ORIENTATION_LANDSCAPE
+    else:
+        ws.page_setup.orientation = ws.ORIENTATION_PORTRAIT
+
+    ws.page_setup.paperSize = ws.PAPERSIZE_A4
+    ws.page_setup.fitToPage = True
+    ws.page_setup.fitToWidth = 1
+    ws.page_setup.fitToHeight = 0
+
+    # Header and Footer
+    ws.oddHeader.center.text = "&BHostel Room Allocation & Fee Management System"
+    ws.oddFooter.left.text = "&D &T - Confidential Administrative Record"
+    ws.oddFooter.right.text = "Page &P of &N"
+
+    # Set Print Area
+    if ws.max_row > 1 and ws.max_column > 1:
+        last_col = get_column_letter(ws.max_column)
+        ws.print_area = f"A1:{last_col}{ws.max_row}"
+
+
 # =====================================================================
 # SHEET 1: EXECUTIVE DASHBOARD
 # =====================================================================
@@ -286,6 +312,7 @@ def build_executive_dashboard(wb: openpyxl.Workbook, data_mgr: DataManager) -> N
     ws.add_chart(chart4, "G26")
 
     auto_fit_columns(ws, min_width=14)
+    configure_sheet_page_setup(ws, landscape=True, zoom=100)
 
 
 # =====================================================================
@@ -334,6 +361,7 @@ def build_student_directory_sheet(wb: openpyxl.Workbook, data_mgr: DataManager) 
     max_row = max(len(students_df) + 1, 2)
     ws.auto_filter.ref = f"A1:G{max_row}"
     auto_fit_columns(ws, min_width=14)
+    configure_sheet_page_setup(ws, landscape=True, zoom=100)
 
 
 # =====================================================================
@@ -436,6 +464,7 @@ def build_room_allocation_sheet(wb: openpyxl.Workbook, data_mgr: DataManager) ->
     ws.add_chart(chart, "I8")
 
     auto_fit_columns(ws, min_width=14)
+    configure_sheet_page_setup(ws, landscape=True, zoom=100)
 
 
 # =====================================================================
@@ -548,6 +577,7 @@ def build_fee_management_sheet(wb: openpyxl.Workbook, data_mgr: DataManager) -> 
         ws.conditional_formatting.add(f"J2:J{max_row}", rule)
 
     auto_fit_columns(ws, min_width=14)
+    configure_sheet_page_setup(ws, landscape=True, zoom=95)
 
 
 # =====================================================================
@@ -628,6 +658,7 @@ def build_course_analysis_sheet(wb: openpyxl.Workbook, data_mgr: DataManager) ->
     ws.add_chart(chart, "I3")
 
     auto_fit_columns(ws, min_width=15)
+    configure_sheet_page_setup(ws, landscape=True, zoom=100)
 
 
 # =====================================================================
@@ -749,6 +780,7 @@ def build_financial_summary_sheet(wb: openpyxl.Workbook, data_mgr: DataManager) 
     ws.add_chart(chart, "G2")
 
     auto_fit_columns(ws, min_width=18)
+    configure_sheet_page_setup(ws, landscape=True, zoom=100)
 
 
 # =====================================================================
@@ -854,6 +886,7 @@ def build_data_analysis_sheet(wb: openpyxl.Workbook, data_mgr: DataManager) -> N
         ws.row_dimensions[r_idx].height = 20
 
     auto_fit_columns(ws, min_width=16)
+    configure_sheet_page_setup(ws, landscape=True, zoom=100)
 
 
 # =====================================================================
