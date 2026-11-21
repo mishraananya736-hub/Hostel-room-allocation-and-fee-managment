@@ -1,6 +1,7 @@
 # HOSTEL ROOM ALLOCATION AND FEE MANAGEMENT SYSTEM
+## Advanced Python Terminal Application with Matplotlib Visualizations & Professional Excel Dashboard
 
-A comprehensive, modular, menu-driven Python application developed for academic demonstration (B.Tech Computer Science and Engineering). The system automates student registration, room allocations, hostel and mess fee collections, room occupancy tracking, and provides advanced numerical and statistical data analysis using **NumPy** and **Pandas**.
+A comprehensive, modular, menu-driven Python application developed for academic demonstration (B.Tech Computer Science and Engineering). The system automates student registration, room allocations, hostel and mess fee collections, room occupancy tracking, and provides advanced numerical, statistical, visual, and spreadsheet analytics using **NumPy**, **Pandas**, **Matplotlib**, and **Openpyxl**.
 
 ---
 
@@ -8,7 +9,7 @@ A comprehensive, modular, menu-driven Python application developed for academic 
 
 Managing hostel infrastructure manually leads to errors such as room over-allocation, fee calculation discrepancies, untracked payment defaults, and inconsistent occupancy reporting. 
 
-The **Hostel Room Allocation and Fee Management System** provides an automated, terminal-driven solution built entirely in Python. It enforces data integrity across multiple relational CSV datasets, applies ACID-like transactional rollback mechanisms during file modifications, and performs analytical reporting directly on operational data.
+The **Hostel Room Allocation and Fee Management System** provides an automated, terminal-driven solution built entirely in Python. It enforces data integrity across multiple relational CSV datasets, applies ACID-like transactional rollback mechanisms during file modifications, generates high-resolution Matplotlib graphical analytics, and exports a publication-grade, 7-worksheet Excel Dashboard workbook.
 
 ---
 
@@ -20,17 +21,21 @@ The **Hostel Room Allocation and Fee Management System** provides an automated, 
 4. **Data Integrity & Persistence**: Relational consistency between `students.csv`, `rooms.csv`, and `fees.csv` with safe atomic writes.
 5. **Numerical Analysis with NumPy**: Fast vectorized computations on fee matrices, pending balances, and occupancy arrays.
 6. **Dataset Processing with Pandas**: Advanced slicing, filtering, sorting, course/room GroupBy aggregations, and missing-value handling.
-7. **Automated Verification**: End-to-end unit and integration test coverage using Python's standard `unittest` framework.
+7. **Professional Visual Analytics**: 5 publication-ready Matplotlib charts saved at 300 DPI in `reports/graphs/`.
+8. **Executive Excel Dashboard**: A multi-sheet business intelligence workbook created with Openpyxl containing KPI cards, native Excel charts, auto-filters, and conditional formatting.
+9. **Automated Verification**: End-to-end unit and integration test coverage using Python's standard `unittest` framework (53 automated tests).
 
 ---
 
 ## 3. Key Features
 
-- **Menu-Driven CLI Interface**: 12 top-level menu options with intuitive submenus, formatted ASCII tables, and Indian Rupee (₹) currency formatting.
+- **Menu-Driven CLI Interface**: 15 top-level menu options with intuitive submenus, formatted ASCII tables, and Indian Rupee (₹) currency formatting.
 - **Transactional File Safety**: Temporary backup and automatic rollback prevents half-written or corrupted CSV datasets in the event of an unexpected runtime failure.
 - **Dynamic Occupancy Synchronization**: Automatic recalculation of occupied beds and vacancies directly against active student assignments.
 - **Comprehensive Overdue Auditing**: Automatic comparison against due dates to flag overdue student accounts.
 - **One-Click Analytical Reports**: Automated generation and export of executive summaries, defaulter lists, and course breakdown CSVs.
+- **Visual Analytics Suite (Matplotlib)**: Dynamic charts for room occupancy, fee collections, mess comparisons, course distributions, and payment histograms.
+- **Executive Excel Dashboard (Openpyxl)**: 7 distinct worksheets with KPI metric cards, conditional formatting rules, and native Excel charts.
 
 ---
 
@@ -39,6 +44,8 @@ The **Hostel Room Allocation and Fee Management System** provides an automated, 
 - **Python 3.12+**: Core programming language.
 - **NumPy (>= 1.24.0)**: 1D/2D array operations, matrix slicing, and statistical functions (`sum`, `mean`, `max`, `min`, `std`).
 - **Pandas (>= 2.0.0)**: Tabular data processing, DataFrame manipulation, boolean filtering, multi-key GroupBy aggregations, and missing-value imputation.
+- **Matplotlib (>= 3.7.0)**: High-resolution (300 DPI) data visualizations using the object-oriented API and Agg headless backend.
+- **Openpyxl (>= 3.1.0)**: Advanced Excel workbook generation with KPI cards, native charts, auto-filters, and conditional formatting.
 - **Tabulate (>= 0.9.0)**: Terminal table formatting (with automatic fallback formatter).
 - **unittest**: Comprehensive automated testing framework.
 - **Pathlib**: Robust, cross-platform filesystem path resolution.
@@ -115,10 +122,82 @@ Pandas handles tabular dataset transformations, aggregation, and reporting:
 7. **Missing-Value Handling**:
    - Detection with `isna()`.
    - Imputation with `fillna({"Room_No": "UNASSIGNED", "Contact": "NOT_AVAILABLE"})`.
+8. **Statistical Descriptions**: `df.describe()` computed on numerical fee columns.
 
 ---
 
-## 8. Dataset Specifications
+## 8. Professional Visual Analytics (Matplotlib)
+
+The `visualization_module.py` module creates 5 publication-ready, 300 DPI analytical graphs saved in `reports/graphs/`:
+
+### Palette System
+- Navy Blue: `#14213D`
+- Royal Blue: `#2563EB`
+- Teal Accent: `#0F766E`
+- Gold / Amber: `#E9B44C`
+- Light Background: `#F5F7FA`
+- Dark Text: `#1F2937`
+
+### Graph Specifications
+1. **Room Occupancy Analysis** (`reports/graphs/room_occupancy.png`):
+   - Stacked bar chart showing Occupied Beds (Royal Blue) and Available Beds (Gold) for all rooms.
+   - Exact numerical labels inside bars and total capacity indicated above bars.
+   - Subtitle displays overall capacity, occupancy percentage, and total available beds.
+2. **Fee Collection Donut Chart** (`reports/graphs/fee_collection.png`):
+   - Donut chart depicting Realized Collections vs Outstanding Dues.
+   - Percentage labels and Rupee amounts on slices.
+   - Central hole displays total billed amount, total collected, and total pending.
+3. **Hostel vs Mess Fee Comparison** (`reports/graphs/hostel_mess_comparison.png`):
+   - Clustered grouped bar chart comparing Total Billed, Realized Collections, and Pending Dues.
+   - Value annotations formatted in Indian Rupees (₹) above each bar.
+4. **Course-Wise Student Distribution** (`reports/graphs/course_distribution.png`):
+   - Horizontal bar chart sorted by enrollment.
+   - Percentage share and student counts annotated on each bar.
+   - Top-enrolled course highlighted in Gold.
+5. **Student Fee Payment Distribution** (`reports/graphs/payment_distribution.png`):
+   - Bi-variate histogram analyzing actual payments for Hostel vs Mess fees.
+   - Dashed vertical lines indicating mean payments for both categories.
+
+---
+
+## 9. Professional Excel Dashboard (Openpyxl)
+
+The `excel_report_module.py` module generates an executive multi-sheet workbook saved at:
+`reports/Hostel_Management_Professional_Report.xlsx`
+
+### Worksheet Architecture
+1. **EXECUTIVE DASHBOARD**:
+   - Merged title banner with subtitle and report generation timestamp.
+   - 14 distinct KPI metric cards with merged borders and color fills:
+     * Total Students, Total Rooms, Bed Capacity, Occupied Beds, Available Beds, Occupancy Rate, Fully Paid Students.
+     * Hostel Billed, Hostel Collected, Hostel Pending, Mess Billed, Mess Collected, Mess Pending, Students with Dues.
+   - 4 Native Excel Charts linked to worksheet reference data:
+     * Room Bed Allocation Bar Chart
+     * Fee Collection vs Dues Doughnut Chart
+     * Hostel vs Mess Performance Clustered Column Chart
+     * Course Enrollment Distribution Bar Chart
+2. **STUDENT DIRECTORY**:
+   - Complete roster of student records with dark navy headers, white bold text, alternating row fills (`#FFFFFF` / `#F5F7FA`), frozen header row, and Excel auto-filter.
+3. **ROOM ALLOCATION**:
+   - Room-by-room capacity and occupancy data with occupancy rate formulas.
+   - Native Excel Bar Chart of bed allocation by room type.
+   - Conditional formatting: Red fill for Full rooms (0 vacancies), Green fill for Available rooms.
+4. **FEE MANAGEMENT**:
+   - Student fee statements with Indian currency formatting (`₹#,##0.00`).
+   - Dynamic status calculation (`PAID`, `PARTIAL`, `PENDING`, `OVERDUE`).
+   - Conditional formatting: Green for PAID, Yellow for PARTIAL, Orange for PENDING, Red for OVERDUE.
+5. **COURSE ANALYSIS**:
+   - Course enrollment counts, average hostel/mess fees, and total realized collections.
+   - Native Excel Bar Chart displaying student counts per course.
+6. **FINANCIAL SUMMARY**:
+   - Complete revenue breakdown matrix with recovery rates, payment statistics (average, highest, lowest, standard deviation), and financial chart.
+7. **DATA ANALYSIS**:
+   - Comprehensive statistical table with Mean, Median, Standard Deviation, Minimum, Maximum, and Sum for all fee columns.
+   - GroupBy room-type occupancy table.
+
+---
+
+## 10. Dataset Specifications
 
 The system operates on three persistent CSV files inside the `data/` directory:
 
@@ -154,20 +233,20 @@ The system operates on three persistent CSV files inside the `data/` directory:
 | `Payment_Date`| String | Date of last payment (YYYY-MM-DD) |
 | `Due_Date` | String | Deadline for fee payment (YYYY-MM-DD) |
 
-*The initial dataset includes **100 realistic student records**, **46 rooms** across 4 floors, and **100 fee records** with varied payment states (40% Paid, 30% Partial, 15% Pending, 15% Overdue).*
-
 ---
 
-## 9. Project Directory Structure
+## 11. Project Directory Structure
 
 ```text
 Wifey ka project/
 │
-├── main.py                     # Main CLI application and menu loop
+├── main.py                     # Main CLI application (15 menu options)
 ├── student_module.py           # Student CRUD, validation, and fee initialization
 ├── room_module.py              # Room allocation, reassignment, vacancy tracking
 ├── fee_module.py               # Hostel/Mess payments, pending fee calculations
 ├── analysis_module.py          # NumPy numerical & Pandas analytical operations
+├── visualization_module.py     # Matplotlib 5-chart high-resolution visual suite
+├── excel_report_module.py      # Professional 7-sheet Openpyxl Excel dashboard
 ├── data_manager.py             # CSV persistence, atomic writes, transactions
 ├── initialization.py           # Programmatic dataset generator and integrity audit
 ├── requirements.txt            # Project dependencies
@@ -179,44 +258,34 @@ Wifey ka project/
 │   ├── rooms.csv
 │   └── fees.csv
 │
-├── reports/                    # Exported summaries and CSV analytical audits
+├── reports/                    # Exported summaries, Excel workbook, and CSV audits
+│   ├── Hostel_Management_Professional_Report.xlsx
 │   ├── hostel_summary_report_*.txt
 │   ├── course_analysis_*.csv
 │   ├── room_occupancy_analysis_*.csv
-│   └── defaulters_pending_list_*.csv
+│   ├── defaulters_pending_list_*.csv
+│   └── graphs/                 # High-resolution PNG charts (300 DPI)
+│       ├── room_occupancy.png
+│       ├── fee_collection.png
+│       ├── hostel_mess_comparison.png
+│       ├── course_distribution.png
+│       └── payment_distribution.png
 │
-└── tests/                      # Automated unittest test suite
+└── tests/                      # Automated unittest test suite (53 tests)
     ├── __init__.py
     ├── test_students.py        # Student module unit tests
     ├── test_rooms.py           # Room module unit tests
     ├── test_fees.py            # Fee module unit tests
     ├── test_data_manager.py    # Data manager unit tests
     ├── test_analysis.py        # NumPy/Pandas analysis unit tests
-    └── test_integration.py     # 6 end-to-end integration workflows
+    ├── test_integration.py     # 6 end-to-end integration workflows
+    ├── test_visualization.py   # Visual analytics and graph generation tests
+    └── test_excel_report.py    # Professional Excel workbook & chart tests
 ```
 
 ---
 
-## 10. Module Responsibilities
-
-1. **`main.py`**:
-   - User interface controller, input loops, submenus, and formatted table presentations.
-2. **`student_module.py`**:
-   - Registration, search by ID/Name, updates, and cascading deletion.
-3. **`room_module.py`**:
-   - Room allocations, capacity validation, room reassignment, and bed vacating.
-4. **`fee_module.py`**:
-   - Hostel and mess payments, payment date recording, status determination (`PAID`, `PARTIAL`, `PENDING`, `OVERDUE`).
-5. **`analysis_module.py`**:
-   - NumPy 1D/2D array manipulations, statistical calculations, Pandas aggregations (`describe()`, `value_counts()`, `groupby()`), master `analyze_data()` function, summary reporting, and report exports.
-6. **`data_manager.py`**:
-   - Schema enforcement, atomic temp-file replace, backup/rollback transaction wrapper, and cross-table synchronization.
-7. **`initialization.py`**:
-   - Realistic dataset generation (100 students, 46 rooms) and foreign key integrity audit.
-
----
-
-## 11. Installation Instructions
+## 12. Installation Instructions
 
 ### Prerequisites
 - Python 3.10 or higher installed.
@@ -237,32 +306,14 @@ pip install -r requirements.txt
 
 ---
 
-## 12. Execution Instructions
+## 13. Execution Instructions
 
-Launch the application using:
-
+### Launch Main Application
 ```powershell
 python main.py
 ```
 
----
-
-## 13. Automated Testing Instructions
-
-Run the complete automated test suite:
-
-```powershell
-python -m unittest discover -s tests -v
-```
-
-### Test Isolation Guarantee
-All unit and integration tests run inside isolated temporary directories (`tempfile.mkdtemp()`). The production datasets in `data/` are **never touched or modified** during test execution.
-
----
-
-## 14. Sample Terminal Output
-
-### Main Menu
+### Main Menu Overview
 ```text
 =================================================================
                      HOSTEL MANAGEMENT SYSTEM                    
@@ -277,102 +328,39 @@ All unit and integration tests run inside isolated temporary directories (`tempf
  8. Fee Status Report
  9. Generate Summary Report
 10. Data Analysis using NumPy and Pandas
-11. Export Reports
-12. Exit
+11. Export Reports (Text & CSV)
+12. Dataset Integrity Audit
+13. Visual Analytics and Graphical Reports
+14. Export Professional Excel Dashboard
+15. Exit
 =================================================================
-Enter choice (1-12):
 ```
 
-### Executive Summary Report (Option 9)
-```text
-+-----------------------------------+---------------+
-| Metric                            | Value         |
-+===================================+===============+
-| Total Registered Students         | 100           |
-+-----------------------------------+---------------+
-| Total Rooms                       | 46            |
-+-----------------------------------+---------------+
-| Total Room Capacity               | 112           |
-+-----------------------------------+---------------+
-| Total Occupied Beds               | 100           |
-+-----------------------------------+---------------+
-| Total Vacant Beds                 | 12            |
-+-----------------------------------+---------------+
-| Room Occupancy Percentage         | 89.29%        |
-+-----------------------------------+---------------+
-| Total Hostel Fees                 | ₹3,287,000.00 |
-+-----------------------------------+---------------+
-| Total Hostel Fees Collected       | ₹2,019,700.00 |
-+-----------------------------------+---------------+
-| Total Hostel Outstanding Balance  | ₹1,267,300.00 |
-+-----------------------------------+---------------+
-| Total Mess Fees                   | ₹2,500,000.00 |
-+-----------------------------------+---------------+
-| Total Mess Fees Collected         | ₹1,460,000.00 |
-+-----------------------------------+---------------+
-| Total Mess Outstanding Balance    | ₹1,040,000.00 |
-+-----------------------------------+---------------+
-| Students with Pending Hostel Fees | 60            |
-+-----------------------------------+---------------+
-| Students with Pending Mess Fees   | 60            |
-+-----------------------------------+---------------+
-| Fully Paid Students               | 40            |
-+-----------------------------------+---------------+
-```
-
-### NumPy Numerical Analysis (Option 10 -> 1)
-```text
---- 1D ARRAY STATISTICAL CALCULATIONS ---
-Total Hostel Fees Billed (np.sum)  : ₹3,287,000.00
-Total Hostel Fees Paid (np.sum)    : ₹2,019,700.00
-Total Hostel Dues Pending (np.sum) : ₹1,267,300.00
-Total Mess Fees Billed (np.sum)    : ₹2,500,000.00
-Total Mess Fees Paid (np.sum)      : ₹1,460,000.00
-Total Mess Dues Pending (np.sum)   : ₹1,040,000.00
-Combined Total Fees Collected      : ₹3,479,700.00
-Combined Total Outstanding Dues    : ₹2,307,300.00
-
-Mean Hostel Fee Billed (np.mean)   : ₹32,870.00
-Mean Hostel Fee Paid (np.mean)     : ₹20,197.00
-Mean Mess Fee Paid (np.mean)       : ₹14,600.00
-Mean Total Payment (np.mean)       : ₹34,797.00
-
-Maximum Total Payment (np.max)     : ₹80,000.00
-Minimum Total Payment (np.min)     : ₹0.00
-Standard Deviation of Paid Fees    : ₹23,986.37
-
---- 2D ARRAY MATRIX OPERATIONS & SLICING ---
-Fee Matrix Shape (N, 4)            : (100, 4)
-Room Matrix Shape (M, 3)           : (46, 3)
-Indexed [0, 0] (1st Student H-Fee) : ₹55,000.00
-Indexed [0, 3] (1st Student M-Paid): ₹25,000.00
-2D Slicing Sample [:5, :2] (First 5 students [Hostel_Fee, Hostel_Paid]):
-  Student 1: Fee = ₹55,000.00, Paid = ₹55,000.00
-  Student 2: Fee = ₹40,000.00, Paid = ₹40,000.00
-  Student 3: Fee = ₹55,000.00, Paid = ₹55,000.00
-  Student 4: Fee = ₹40,000.00, Paid = ₹40,000.00
-  Student 5: Fee = ₹40,000.00, Paid = ₹40,000.00
-```
+- Select **`13`** to enter the Visual Analytics menu and generate or view all 5 Matplotlib charts.
+- Select **`14`** to generate the 7-sheet Professional Excel Dashboard (`Hostel_Management_Professional_Report.xlsx`).
 
 ---
 
-## 15. Integration Testing Verification
+## 14. Automated Testing Instructions
 
-The project includes 6 end-to-end integration workflows verified in `tests/test_integration.py`:
-- **Workflow 1**: Student Registration -> Room Allocation -> Occupancy Verification -> Hostel & Mess Payment -> Summary Report Generation.
-- **Workflow 2**: Student Search -> Attribute Updates -> Direct CSV Verification.
-- **Workflow 3**: Student Room Reassignment -> Source Room Vacancy Restored -> Target Room Occupancy Increment.
-- **Workflow 4**: Cascading Student Deletion -> Bed Vacated -> Associated Fee Record Settled.
-- **Workflow 5**: Application Restart -> Persistence Verification across fresh `DataManager` sessions.
-- **Workflow 6**: Boundary and Error Handling -> Over-allocation prevention, negative payment rejection, and state rollback.
+Run the complete 53-test automated test suite:
+
+```powershell
+python -m unittest discover -s tests -v
+```
+
+### Test Suite Summary
+- **Original Tests**: 39 test cases (CRUD, rooms, fees, data manager, integration workflows) $\rightarrow$ **100% Passed**.
+- **Visualization Tests**: 6 test cases in `test_visualization.py` $\rightarrow$ **100% Passed**.
+- **Excel Report Tests**: 8 test cases in `test_excel_report.py` $\rightarrow$ **100% Passed**.
+- **Total Tests**: **53 tests**, 0 failures, 0 errors.
+- **Isolation Guarantee**: All tests execute inside temporary directories (`tempfile.mkdtemp()`); operational data in `data/` remains completely untouched.
 
 ---
 
-## 16. Future Scope
+## 15. Future Scope
 
-1. **Biometric & Attendance Integration**: Adding RFID or biometric in-out logging to monitor student curfew timings.
-2. **Online Payment Gateway API**: Direct integration with UPI/Razorpay APIs for automated payment receipts.
-3. **Student Grievance & Maintenance Ticketing**: A complaint management module for plumbing, electrical, and internet repairs.
-4. **Graphical Charts Export**: Generating Matplotlib PNG dashboards for administrative presentations.
-#   H o s t e l - r o o m - a l l o c a t i o n - a n d - f e e - m a n a g m e n t  
- 
+1. **Biometric Curfew Logging**: Integration with RFID/biometric turnstile logs.
+2. **Automated Email Fee Invoices**: Auto-dispatching PDF receipts and payment reminders via SMTP.
+3. **Student Grievance Ticketing**: Maintenance request workflow for hostel repairs.
+4. **Web Portal Integration**: Optional FastAPI REST interface for mobile clients.

@@ -15,6 +15,8 @@ import student_module
 import room_module
 import fee_module
 import analysis_module
+import visualization_module
+import excel_report_module
 from analysis_module import format_table
 
 
@@ -564,6 +566,121 @@ def data_analysis_menu(data_mgr: DataManager) -> None:
 
 
 # -------------------------------------------------------------
+# 13. Visual Analytics Submenu (Matplotlib Graphs)
+# -------------------------------------------------------------
+def visual_analytics_menu(data_mgr: DataManager) -> None:
+    """Submenu for generating and viewing professional Matplotlib charts."""
+    while True:
+        print_header("VISUAL ANALYTICS & GRAPHICAL REPORTS")
+        print("1. Generate All Five Graphs")
+        print("2. View Room Occupancy Graph")
+        print("3. View Fee Collection Graph")
+        print("4. View Hostel vs Mess Comparison Graph")
+        print("5. View Course Distribution Graph")
+        print("6. View Payment Distribution Graph")
+        print("7. Return to Main Menu")
+        print("-" * 65)
+
+        choice = input("Enter choice (1-7): ").strip()
+        graphs_dir = visualization_module.get_default_graphs_dir(data_mgr)
+
+        if choice == "1":
+            print_header("GENERATING ALL 5 ANALYTICAL GRAPHS")
+            paths = visualization_module.generate_all_graphs(data_mgr)
+            print(f"[SUCCESS] All 5 graphs generated successfully in:\n  -> {graphs_dir}\n")
+            for k, p in paths.items():
+                print(f"  • {k.replace('_', ' ').title()}: {p}")
+            pause()
+
+        elif choice == "2":
+            p = visualization_module.plot_room_occupancy(data_mgr)
+            print(f"[SUCCESS] Generated: {p}")
+            opened = visualization_module.open_graph_image(p)
+            if opened:
+                print("[INFO] Opened in system default image viewer.")
+            else:
+                print(f"[INFO] Image saved at: {p}")
+            pause()
+
+        elif choice == "3":
+            p = visualization_module.plot_fee_collection(data_mgr)
+            print(f"[SUCCESS] Generated: {p}")
+            opened = visualization_module.open_graph_image(p)
+            if opened:
+                print("[INFO] Opened in system default image viewer.")
+            else:
+                print(f"[INFO] Image saved at: {p}")
+            pause()
+
+        elif choice == "4":
+            p = visualization_module.plot_hostel_mess_comparison(data_mgr)
+            print(f"[SUCCESS] Generated: {p}")
+            opened = visualization_module.open_graph_image(p)
+            if opened:
+                print("[INFO] Opened in system default image viewer.")
+            else:
+                print(f"[INFO] Image saved at: {p}")
+            pause()
+
+        elif choice == "5":
+            p = visualization_module.plot_course_distribution(data_mgr)
+            print(f"[SUCCESS] Generated: {p}")
+            opened = visualization_module.open_graph_image(p)
+            if opened:
+                print("[INFO] Opened in system default image viewer.")
+            else:
+                print(f"[INFO] Image saved at: {p}")
+            pause()
+
+        elif choice == "6":
+            p = visualization_module.plot_payment_distribution(data_mgr)
+            print(f"[SUCCESS] Generated: {p}")
+            opened = visualization_module.open_graph_image(p)
+            if opened:
+                print("[INFO] Opened in system default image viewer.")
+            else:
+                print(f"[INFO] Image saved at: {p}")
+            pause()
+
+        elif choice == "7":
+            break
+        else:
+            print("[ERROR] Invalid choice. Please choose 1-7.")
+            pause()
+
+
+# -------------------------------------------------------------
+# 14. Professional Excel Dashboard Export Action
+# -------------------------------------------------------------
+def export_excel_dashboard_action(data_mgr: DataManager) -> None:
+    """Validate datasets and export the 7-sheet professional Excel workbook."""
+    print_header("EXPORT PROFESSIONAL EXCEL DASHBOARD")
+    print("Reading latest CSV files and validating dataset integrity...")
+    try:
+        report = verify_dataset_integrity(data_mgr)
+        if not report["is_valid"]:
+            print(f"[WARNING] Integrity warning: {report['issues']}")
+        
+        excel_path = excel_report_module.export_professional_excel_report(data_mgr)
+        print("\n[SUCCESS] Professional Excel Dashboard generated successfully!")
+        print(f"File Location: {excel_path}")
+        print("\nWorksheets Included in Workbook:")
+        print("  1. EXECUTIVE DASHBOARD (KPI Cards & 4 Native Charts)")
+        print("  2. STUDENT DIRECTORY (Filtered, styled table)")
+        print("  3. ROOM ALLOCATION (Conditional formatting & chart)")
+        print("  4. FEE MANAGEMENT (INR currency & status formatting)")
+        print("  5. COURSE ANALYSIS (Course aggregations & chart)")
+        print("  6. FINANCIAL SUMMARY (Revenue matrix & chart)")
+        print("  7. DATA ANALYSIS (NumPy & Pandas statistical metrics)")
+    except PermissionError as pe:
+        print(f"\n[ERROR] Permission Denied: {pe}")
+        print("Please close 'Hostel_Management_Professional_Report.xlsx' in Excel and try again.")
+    except Exception as e:
+        print(f"\n[ERROR] Failed to export Excel dashboard: {e}")
+    pause()
+
+
+# -------------------------------------------------------------
 # Main Application Flow
 # -------------------------------------------------------------
 def main() -> None:
@@ -590,11 +707,14 @@ def main() -> None:
         print(" 8. Fee Status Report")
         print(" 9. Generate Summary Report")
         print("10. Data Analysis using NumPy and Pandas")
-        print("11. Export Reports")
-        print("12. Exit")
+        print("11. Export Reports (Text & CSV)")
+        print("12. Dataset Integrity Audit")
+        print("13. Visual Analytics and Graphical Reports")
+        print("14. Export Professional Excel Dashboard")
+        print("15. Exit")
         print("=" * 65)
 
-        choice = input("Enter choice (1-12): ").strip()
+        choice = input("Enter choice (1-15): ").strip()
 
         if choice == "1":
             student_management_menu(data_mgr)
@@ -713,11 +833,30 @@ def main() -> None:
             pause()
 
         elif choice == "12":
+            print_header("DATASET INTEGRITY AUDIT")
+            audit = verify_dataset_integrity(data_mgr)
+            print(f"Data Integrity Status : {'PASSED (100% Valid)' if audit['is_valid'] else 'FAILED'}")
+            print(f"Total Student Records : {audit['student_count']}")
+            print(f"Total Room Records    : {audit['room_count']}")
+            print(f"Total Fee Records     : {audit['fee_count']}")
+            if audit["issues"]:
+                print(f"Issues Detected       : {audit['issues']}")
+            else:
+                print("Foreign Keys & Room Capacities: All synchronized perfectly.")
+            pause()
+
+        elif choice == "13":
+            visual_analytics_menu(data_mgr)
+
+        elif choice == "14":
+            export_excel_dashboard_action(data_mgr)
+
+        elif choice == "15":
             print("\nThank you for using the Hostel Management System. Goodbye!")
             sys.exit(0)
 
         else:
-            print("[ERROR] Invalid choice. Please enter a number between 1 and 12.")
+            print("[ERROR] Invalid choice. Please enter a number between 1 and 15.")
             pause()
 
 
